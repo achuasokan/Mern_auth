@@ -12,7 +12,7 @@ connectDB();
 const app = express()
 
 //? middleware
-app.use(express.json());                                                                        //parse json
+app.use(express.json());                                                                        //~parse json
 app.use(express.urlencoded({extended:false}));   
 
 //? importing the routes
@@ -22,6 +22,18 @@ import authRouter from './routes/authRoutes.js'
 //? routes
 app.use('/api/user',userRouter) 
 app.use('/api/auth',authRouter)
+
+//? error handling middleware
+app.use((err, req, res, next) => {
+  const statuscode = err.statuscode || 500
+  const message = err.message || 'Internal Server Error'
+
+  return res.status(statuscode).json({
+    success: false,
+    message,
+    statuscode
+  })
+})
 
 //?port
 const port=process.env.PORT || 3000
