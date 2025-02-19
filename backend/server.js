@@ -12,6 +12,14 @@ connectDB();
 const app = express()
 
 
+
+//? importing the routes
+import userRouter from './routes/userRoutes.js'
+
+//? routes
+app.use('/api/user',userRouter) 
+
+
 const port=process.env.PORT || 3000
 
 
