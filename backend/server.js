@@ -11,15 +11,19 @@ connectDB();
 //? create express app
 const app = express()
 
-
+//? middleware
+app.use(express.json());                                                                        //parse json
+app.use(express.urlencoded({extended:false}));   
 
 //? importing the routes
 import userRouter from './routes/userRoutes.js'
+import authRouter from './routes/authRoutes.js'
 
 //? routes
 app.use('/api/user',userRouter) 
+app.use('/api/auth',authRouter)
 
-
+//?port
 const port=process.env.PORT || 3000
 
 
