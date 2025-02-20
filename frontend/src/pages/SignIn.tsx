@@ -1,11 +1,14 @@
 import React, { useState } from 'react' 
 import { Link, useNavigate} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice'
 
 const SignIn = () => {
   const navigate = useNavigate()
 const [formData, setFormData] = useState({})
-const [error, setError] = useState(false)
-const [loading, setLoading] = useState(false)
+
+const { loading, error} = useSelector((state) => state.user)
+const dispatch = useDispatch()
 
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   setFormData({...formData, [e.target.id]: e.target.value})
@@ -16,8 +19,7 @@ const handleSubmit = async (e:React.FormEvent) => {
 
   try {
     e.preventDefault()
-    setLoading(true)
-    setError(false)
+    dispatch(signInStart())
     const res = await fetch('/api/auth/signin',{
       method: 'POST',
       headers: {
@@ -26,16 +28,16 @@ const handleSubmit = async (e:React.FormEvent) => {
       body: JSON.stringify(formData)
     })
     const data = await res.json()
-    setLoading(false)
+   
     
     if(data.success === false) {
-      setError(true)
+      dispatch(signInFailure(data))
       return
     }
+    dispatch(signInSuccess(data))
     navigate('/')
   } catch (error) {
-    setLoading(false)
-    setError(true)
+    dispatch(signInFailure(error))
   }
 
 }
@@ -56,7 +58,7 @@ const handleSubmit = async (e:React.FormEvent) => {
       <span className='text-blue-500'>Sign Up</span>
       </Link>
     </div>
-    <p className='text-red-500 '>{error && 'Something went wrong'}</p>
+    <p className='text-red-500 '>{error ? error.message || 'Something went wrong' : ''}</p>
     </div>
   )
 }
