@@ -3,6 +3,8 @@ import { Link, useNavigate} from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice'
 import OAuth from '../components/OAuth'
+import { toast } from "react-toastify"
+
 
 const SignIn = () => {
   const navigate = useNavigate()
@@ -36,6 +38,7 @@ const handleSubmit = async (e:React.FormEvent) => {
       return
     }
     dispatch(signInSuccess(data))
+    toast.success('User logged in')
     navigate('/')
   } catch (error) {
     dispatch(signInFailure(error))

@@ -1,7 +1,7 @@
 import { useSelector,useDispatch } from "react-redux"
 import React, { useRef, useState } from "react"
 import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signOut } from "../redux/user/userSlice"
-
+import { toast } from "react-toastify"
 
 
 
@@ -64,6 +64,7 @@ const Profile = () => {
         return;
       }
       dispatch(deleteUserSuccess(data));
+      toast.success(data)
     } catch (error) {
       dispatch(deleteUserFailure(error));
     }
@@ -73,6 +74,7 @@ const Profile = () => {
     try {
       await fetch('/api/auth/signout');
       dispatch(signOut())
+      toast.success('User logged out ')
     } catch (error) {
       console.log(error);
     }

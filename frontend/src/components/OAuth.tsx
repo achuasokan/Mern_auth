@@ -3,6 +3,12 @@ import { auth } from '../services/firebase'
 import { useDispatch, UseDispatch } from 'react-redux'
 import { signInSuccess } from '../redux/user/userSlice'
 import { useNavigate } from 'react-router-dom'
+import { toast } from "react-toastify"
+
+
+
+
+
 const OAuth = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -24,7 +30,7 @@ const OAuth = () => {
 
       const data = await res.json();
       dispatch(signInSuccess(data))
-      console.log("data",data);
+      toast.success('User logged in ')
       navigate('/')
     } catch (error) {
       console.log('Could not login with google', error);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react' 
 import { Link, useNavigate} from 'react-router-dom'
 import OAuth from '../components/OAuth'
+import { toast } from "react-toastify"
 
 const SignUp = () => {
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ const handleSubmit = async (e:React.FormEvent) => {
       return;
     }
     
+    toast.success('Sign up successful')
     navigate('/sign-in')
   } catch (error) {
     setLoading(false)
