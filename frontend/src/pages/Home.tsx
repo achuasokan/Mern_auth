@@ -1,8 +1,8 @@
-import React from 'react'
+
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <div className='text-green-600 text-center mt-50 text-3xl'>Home</div>
   )
 }
 
