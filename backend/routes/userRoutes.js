@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.get('/',userControl.Home)
 router.post('/update/:id', verifyToken, userControl.update)
-
+router.delete('/delete/:id',verifyToken, userControl.deleteUser)
 
 
 

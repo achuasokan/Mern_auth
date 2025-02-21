@@ -1,6 +1,6 @@
-import { useSelector, UseDispatch, useDispatch } from "react-redux"
+import { useSelector,useDispatch } from "react-redux"
 import React, { useRef, useState } from "react"
-import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice"
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signOut } from "../redux/user/userSlice"
 
 
 
@@ -51,8 +51,32 @@ const Profile = () => {
   const handleChange = (e) => {
     setFormData({...form,[e.target.id]: e.target.value})
   }
-  console.log(form);
-  
+
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/signout');
+      dispatch(signOut())
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -73,11 +97,11 @@ const Profile = () => {
       </form>
 
       <div className="flex justify-between mt-5">
-        <span className=" text-red-700 cursor-pointer">Delete Account</span>
-        <span className=" text-red-700 cursor-pointer">Sign Out</span>
+        <span onDoubleClick={handleDelete} className=" text-red-700 cursor-pointer">Delete Account</span>
+        <span onClick={handleSignOut} className=" text-red-700 cursor-pointer">Sign Out</span>
       </div>
       <p className="text-red-500 mt-5">{error && 'Something went wrong'}</p>
-      <p className="text-green-500 mt-5">{updateSuccess && 'User is updated successfully'}</p>
+      <p className="text-green-500 mt-5">{updateSuccess && 'Updated successfully'}</p>
     </div>
     </>
   )
