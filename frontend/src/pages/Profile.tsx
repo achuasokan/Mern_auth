@@ -48,7 +48,7 @@ const Profile = () => {
     }
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({...form,[e.target.id]: e.target.value})
   }
 

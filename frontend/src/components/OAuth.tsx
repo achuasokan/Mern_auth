@@ -1,6 +1,6 @@
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth } from '../services/firebase'
-import { useDispatch, UseDispatch } from 'react-redux'
+import { useDispatch} from 'react-redux'
 import { signInSuccess } from '../redux/user/userSlice'
 import { useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify"
