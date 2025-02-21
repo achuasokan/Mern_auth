@@ -27,13 +27,13 @@ const handleSubmit = async (e:React.FormEvent) => {
       body: JSON.stringify(formData)
     })
     const data = await res.json()
-    console.log(data);
     setLoading(false)
-    
-    if(data.success === false) {
-      setError(true)
-      return
+  
+    if (!res.ok) {
+      setError(data.message || 'Something went wrong');
+      return;
     }
+    
     navigate('/sign-in')
   } catch (error) {
     setLoading(false)
@@ -61,7 +61,7 @@ const handleSubmit = async (e:React.FormEvent) => {
       <span className='text-blue-500'>Sign In</span>
       </Link>
     </div>
-    <p className='text-red-500 '>{error && 'Something went wrong'}</p>
+    <p className='text-red-500'>{error}</p>
     </div>
   )
 }

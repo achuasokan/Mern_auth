@@ -10,6 +10,20 @@ export const signUp = async(req, res, next) => {
   try {
     const {username, email, password} = req.body
 
+      // Validation
+      if (!username || !email || !password) {
+        return next(errorHandler(400, 'All fields are required.'));
+      }
+  
+      if (password.length < 6) {
+        return next(errorHandler(400, 'Password must be at least 6 characters long.'));
+      }
+  
+      const existingUser = await userModel.findOne({ email });
+      if (existingUser) {
+        return next(errorHandler(400, 'Email is already in use.'));
+      }
+
     //~ Hash the password 
   const hashedPassword = bcryptjs.hashSync(password, 10)
 
