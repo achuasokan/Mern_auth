@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom"
-import { useSelector, UseSelector } from "react-redux"
+import { useSelector } from "react-redux"
+
+
+
 const Header = () => {
+
   const {currentUser} = useSelector(state => state.user)
   return (
-    <div className='bg-black text-white'>
+    <div className='bg-black text-white  border-b-2 border-b-indigo-600'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/'>
         <h1 className='font-bold'>Auth App</h1>

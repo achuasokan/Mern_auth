@@ -49,8 +49,8 @@ const handleSubmit = async (e:React.FormEvent) => {
     <div className='p-3 max-w-lg mx-auto '>
     <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
     <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-      <input type='text'  placeholder='Email' id='email' className='bg-slate-100 p-3'  onChange={handleChange}/>
-      <input type='text'  placeholder='Password' id='password' className='bg-slate-100 p-3'  onChange={handleChange}/>
+      <input type='text'  placeholder='Email' id='email' className='bg-slate-100 p-3 text-black'  onChange={handleChange}/>
+      <input type='text'  placeholder='Password' id='password' className='bg-slate-100 p-3 text-black'  onChange={handleChange}/>
       <button className='bg-slate-700 text-white p-3 rounded uppercase hover:opacity-95'> {loading ? 'Loading...' : 'Sign In'}  </button>
 
       <OAuth />

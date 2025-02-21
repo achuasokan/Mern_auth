@@ -1,6 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
+import cookieParser from 'cookie-parser';
+
 
 //? dotenv config
 dotenv.config();
@@ -13,6 +15,7 @@ const app = express()
 
 //? middleware
 app.use(express.json());                                                                        //~parse json
+app.use(cookieParser())
 app.use(express.urlencoded({extended:false}));   
 
 //? importing the routes

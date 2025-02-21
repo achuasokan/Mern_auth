@@ -45,9 +45,9 @@ const handleSubmit = async (e:React.FormEvent) => {
 
 
   return (
-    <div className='p-3 max-w-lg mx-auto '>
+    <div className='p-3 max-w-lg mx-auto mt-20'>
     <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
-    <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+    <form className='flex flex-col gap-4 text-black' onSubmit={handleSubmit}>
       <input type='text'   placeholder='Username' id='username' className='bg-slate-100 p-3' onChange={handleChange} />
       <input type='text'  placeholder='Email' id='email' className='bg-slate-100 p-3'  onChange={handleChange}/>
       <input type='text'  placeholder='Password' id='password' className='bg-slate-100 p-3'  onChange={handleChange}/>
