@@ -17,13 +17,23 @@ const Profile = () => {
   const [form,setFormData] = useState({})
   const dispatch = useDispatch()
   const [updateSuccess, setUpdateSuccess] = useState(false)
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
    
-
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if(file) {
-      setImage(file)
-    }
+  let showWidget = () => {
+    
+    let widget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
+        uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          console.log(result.info.url);
+          setProfilePicture(result.info.url);
+        }
+      }
+    );
+    widget.open();
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,9 +45,13 @@ const Profile = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify({
+          ...form,
+          profilePicture: profilePicture,
+        })
       })
       const data = await res.json()
+
       if(data.success === false) {
         dispatch(updateUserFailure(data))
       }
@@ -87,10 +101,15 @@ const Profile = () => {
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
 
       <form className="flex flex-col gap-4 text-black" onSubmit={handleSubmit}>
-        <input type='file' ref={fileRef}  hidden  accept='image/*' onChange={handleImage}/>
+        <input type='file' ref={fileRef}  hidden  accept='image/*' onChange={showWidget}/>
 
         <div className="relative flex justify-center">
-        <img src={currentUser.profilePicture} alt="profile" onClick={()=> fileRef.current.click()} className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"/>
+        <img 
+          src={profilePicture || currentUser.profilePicture} 
+          alt="profile" 
+          onClick={showWidget} 
+          className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
+        />
         <FontAwesomeIcon icon={faEdit} className="absolute  bottom-1 left-65  text-white  rounded-full p-1 cursor-pointer" />
         </div>
  
