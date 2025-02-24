@@ -11,6 +11,8 @@ export const Home = async(req,res) => {
   }
 }
 
+
+//* //  //  //   //  //          Updating user profile      //  //  //  //  //  //  //
 export const update = async (req, res, next) => {
   
   if (req.user.id !== req.params.id) {
@@ -40,7 +42,7 @@ export const update = async (req, res, next) => {
 };
 
 
-
+//* //  //  //   //  //          Deleting a user     //  //  //  //  //  //  //
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, 'You can delete only your account!'));
