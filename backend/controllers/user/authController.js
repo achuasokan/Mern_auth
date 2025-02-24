@@ -19,9 +19,18 @@ export const signUp = async(req, res, next) => {
         return next(errorHandler(400, 'Password must be at least 6 characters long.'));
       }
   
-      const existingUser = await userModel.findOne({ email });
+      const existingUser = await userModel.findOne({ 
+        $or: [
+          { email },
+          { username }
+        ]
+      });
+
       if (existingUser) {
-        return next(errorHandler(400, 'Email is already in use.'));
+        if (existingUser.email === email) {
+          return next(errorHandler(400, 'Email is already in use.'));
+        }
+        return next(errorHandler(400, 'Username is already taken. Try a different one.'));
       }
 
     //~ Hash the password 
