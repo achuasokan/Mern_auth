@@ -2,7 +2,8 @@ import { useSelector,useDispatch } from "react-redux"
 import React, { useRef, useState } from "react"
 import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signOut } from "../redux/user/userSlice"
 import { toast } from "react-toastify"
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -87,8 +88,12 @@ const Profile = () => {
 
       <form className="flex flex-col gap-4 text-black" onSubmit={handleSubmit}>
         <input type='file' ref={fileRef}  hidden  accept='image/*' onChange={handleImage}/>
-        <img src={currentUser.profilePicture} alt="profile" onClick={()=> fileRef.current.click()} className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"/>
 
+        <div className="relative flex justify-center">
+        <img src={currentUser.profilePicture} alt="profile" onClick={()=> fileRef.current.click()} className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"/>
+        <FontAwesomeIcon icon={faEdit} className="absolute  bottom-1 left-65  text-white  rounded-full p-1 cursor-pointer" />
+        </div>
+ 
         <input type='text' id='username' placeholder="Username" onChange={handleChange} defaultValue={currentUser.username} className="bg-slate-100 rounded-lg p-3" />
         <input type='email' id='email' placeholder="Email" onChange={handleChange} defaultValue={currentUser.email} className="bg-slate-100 rounded-lg p-3 disabled:opacity-35"  disabled/>
         <input type='password' id='password' placeholder="Password" onChange={handleChange} className="bg-slate-100 rounded-lg p-3" />
