@@ -2,7 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import cookieParser from 'cookie-parser';
-
+import morgan from "morgan";
 
 //? dotenv config
 dotenv.config();
@@ -17,6 +17,8 @@ const app = express()
 app.use(express.json());                                                                        //~parse json
 app.use(cookieParser())
 app.use(express.urlencoded({extended:false}));   
+app.use(morgan('dev'));   
+
 
 //? importing the routes
 import userRouter from './routes/userRoutes.js'

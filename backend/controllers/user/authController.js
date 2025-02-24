@@ -15,8 +15,17 @@ export const signUp = async(req, res, next) => {
         return next(errorHandler(400, 'All fields are required.'));
       }
   
-      if (password.length < 6) {
-        return next(errorHandler(400, 'Password must be at least 6 characters long.'));
+
+      const namepattern = /^(?! )[A-Za-z ]{3,20}$/;
+      const emailpattern=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const passwordpattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?!.*\s)[A-Za-z\d!@#$%^&*]{6,}$/;
+
+      if(!namepattern.test(username)) {
+        return next(errorHandler(400,'Name must be between 3 to 20 characters long and contain only alphabets.'))
+      } else if(!emailpattern.test(email)) {
+        return next(errorHandler(400,'Please enter a valid email address'))
+      } else if(!passwordpattern.test(password)) {
+        return next(errorHandler(400,'Password must be at least 6 characters long, include upper and lower case letters, a digit and a special character.'))
       }
   
       const existingUser = await userModel.findOne({ 
