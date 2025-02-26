@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2'
 import AdminNavbar from '../../components/AdminNavbar';
 
 //^ interface for user objects
@@ -48,8 +49,18 @@ const Dashboard = () => {
       return 
     }
     const confirmationMessage = user.blocked ? 'Are you sure you want to unblock this user?' : 'Are you sure you want to block this user?';
+
+    const result = await Swal.fire({
+      title:confirmationMessage,
+      icon: 'warning',
+      showCancelButton:true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+      cancelButtonColor:'#d33',
+      confirmButtonColor: '#3085d6',
+    })
   
-    if (window.confirm(confirmationMessage)) {
+    if (result.isConfirmed) {
       const res = await fetch(`/api/admin/toggle-block/${userId}`, { method: 'PATCH' });
       const data = await res.json();
       if (data.success) {

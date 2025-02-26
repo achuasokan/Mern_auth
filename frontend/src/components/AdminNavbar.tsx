@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux"
 import { adminLogout } from "../redux/admin/adminSlice"
 import { toast } from "react-toastify"
 import React from "react"
-
+import Swal from 'sweetalert2'
 interface NavbarProps {
   setSearchQuery: (query: string) => void
 }
@@ -10,10 +10,27 @@ interface NavbarProps {
 const AdminNavbar:React.FC<NavbarProps> = ({ setSearchQuery }) => {
 
   const dispatch = useDispatch()
+
   const handleLogout = () => {
-    dispatch(adminLogout())
-    toast.success('Admin logged out')
+    Swal.fire({ // Add confirmation dialog
+      title: 'Confirm Logout',
+      text: "Are you sure you want to log out?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      customClass: {
+        popup:'bg-black'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(adminLogout())
+        toast.success('Admin logged out')
+      }
+    })
   }
+  
 
   return (
     <>
