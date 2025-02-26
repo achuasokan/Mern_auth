@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import AdminNavbar from '../../components/AdminNavbar';
 
+//^ interface for user objects
 interface User {
   _id: string;
   username: string;
@@ -13,8 +14,9 @@ interface User {
 const Dashboard = () => {
 
   const [users, setUsers] = useState<User[]>([])
-  // const dispatch =useDispatch()
+  const [searchQuery, setSearchQuery] = useState('')
 
+//^ fetch the users when the components mount
   useEffect(() => {
     const fetchUsers= async () => {
       try {
@@ -34,10 +36,17 @@ const Dashboard = () => {
     fetchUsers()
   },[])
 
+  //^ filtering users based on the search query
+  const filteredUsers = users.filter(user => user.username.toLowerCase().includes(searchQuery.toLowerCase()))
 
-  const handleToggleUserBlock = async (userId) => {
-    const user = users.find(user => user._id === userId);
-    // const action = user.blocked ? 'unblock' : 'block';
+
+  const handleToggleUserBlock = async (userId: string) => {
+    const user = users.find(user => user._id === userId);     //~ Finding the user by id
+
+    if(!user) {
+      toast.error('User not found')
+      return 
+    }
     const confirmationMessage = user.blocked ? 'Are you sure you want to unblock this user?' : 'Are you sure you want to block this user?';
   
     if (window.confirm(confirmationMessage)) {
@@ -56,7 +65,7 @@ const Dashboard = () => {
   return (
     <>
       {/* Navbar */}
-      <AdminNavbar />
+      <AdminNavbar   setSearchQuery={setSearchQuery}/>
 
       {/* Table */}
       <div className="container mx-auto p-4">
@@ -72,7 +81,7 @@ const Dashboard = () => {
           </thead>
           <tbody>
             {
-              users.map(user => (
+              filteredUsers.map(user => (
                 <tr key={user._id} className="border-b border-[#3a3a3a] hover:bg-[#2a2a2a] transition-colors duration-200">
                   <td className="px-6 py-4 font-medium text-center text-lg text-lime-400">{users.indexOf(user) + 1}</td>
                   <td className="px-6 py-4 font-medium text-center text-blue-500">{user.username}</td>
