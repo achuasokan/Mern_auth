@@ -23,10 +23,12 @@ app.use(morgan('dev'));
 //? importing the routes
 import userRouter from './routes/userRoutes.js'
 import authRouter from './routes/authRoutes.js'
+import adminRouter from './routes/adminRoutes.js'
 
 //? routes
 app.use('/api/user',userRouter) 
 app.use('/api/auth',authRouter)
+app.use('/api/admin',adminRouter)
 
 //? error handling middleware
 app.use((err, req, res, next) => {
