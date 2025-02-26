@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import AdminLogin from "./pages/Admin/Login"
 import Dashboard from "./pages/Admin/Dashboard"
 import AdminLayout from "./components/Adminlayout"
+import AdminProtectedRoute from "./components/AdminProtectedRoute"
 
 const App = () => {
   const location = useLocation();
@@ -27,9 +28,11 @@ const App = () => {
         <Route path='/sign-up' element={ <SignUp />} />
         <Route path='/admin/login' element={<AdminLogin />} />
 
-        <Route element={<AdminLayout />}>
+         <Route element={<AdminProtectedRoute />}>
+           <Route element={<AdminLayout />}>
           <Route path='/admin/dashboard' element={<Dashboard />} />
         </Route>
+         </Route>
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
