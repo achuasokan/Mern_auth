@@ -98,9 +98,12 @@ export const google = async (req,res,next) => {
   try {
     const user = await userModel.findOne({ email: req.body.email})
 
-    
-
     if(user) {
+
+      if(user.blocked) {
+        return next(errorHandler(403,'Your account has been blocked. please contact support'))
+      }
+
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       
     const { password: hashedPassword, ...rest } = user._doc; //~ Excluding the password from the response

@@ -29,6 +29,11 @@ const OAuth = () => {
       })
 
       const data = await res.json();
+      if(res.status === 403) {
+        toast.error(data.message)
+        navigate('/sign-in')
+        return
+      }
       dispatch(signInSuccess(data))
       toast.success('User logged in ')
       navigate('/')
