@@ -93,6 +93,7 @@ export const signIn = async (req, res, next) => {
 
 
 //* //  //  //   //  //          Google Auth     //  //  //  //  //  //  //
+
 export const google = async (req,res,next) => {
   try {
     const user = await userModel.findOne({ email: req.body.email})
@@ -137,6 +138,7 @@ export const google = async (req,res,next) => {
 
 
 //* //  //  //   //  //          Signout    //  //  //  //  //  //  //
+
 export const signout = (req,res) => {
   res.clearCookie('access_token').status(200).json('signout successfully')
 }

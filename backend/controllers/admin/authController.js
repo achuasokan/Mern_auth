@@ -2,6 +2,9 @@ import { errorHandler } from '../../utils/error.js'
 import jwt from 'jsonwebtoken'
 import userModel from '../../models/User.js'
 
+
+//* //  //  //   //  //          Post Admin Login       //  //  //  //  //  //  //
+
 export const postAdminLogin = async (req,res) => {
   try {
     const { email, password  } = req.body;
@@ -19,6 +22,7 @@ export const postAdminLogin = async (req,res) => {
   } 
 
 
+//* //  //  //   //  //          GET USER LIST       //  //  //  //  //  //  //
 
 export const getAllUsers = async (req,res,next) => {
   try {
@@ -31,6 +35,7 @@ export const getAllUsers = async (req,res,next) => {
 }
 
 
+//* //  //  //   //  //          Block & Unblock the users      //  //  //  //  //  //  //
 
 export const toggleUserBlock = async (req,res,next) => {
   try {
