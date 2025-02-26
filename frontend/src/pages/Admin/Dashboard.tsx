@@ -100,11 +100,11 @@ const Dashboard = () => {
                   <td className="px-6 py-4 font-medium text-center">{user.blocked ? 'Blocked' : 'Active'}</td>
                   <td className="px-6 py-4 font-medium text-center text-blue-500">
                     {user.blocked ? (
-                      <button onClick={() => handleToggleUserBlock(user._id)} className="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded">
+                      <button onClick={() => handleToggleUserBlock(user._id)} className="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded cursor-pointer">
                         Unblock
                       </button>
                     ) : (
-                      <button onClick={() => handleToggleUserBlock(user._id)} className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded">
+                      <button onClick={() => handleToggleUserBlock(user._id)} className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded cursor-pointer">
                         Block
                       </button>
                     )}
