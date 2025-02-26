@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type:String,
     default:'https://i.pinimg.com/736x/fa/d5/e7/fad5e79954583ad50ccb3f16ee64f66d.jpg'
+  },
+  blocked: {
+    type: Boolean,
+    default: false
   }
 }, {timestamps: true})
 
