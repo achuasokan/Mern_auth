@@ -11,7 +11,9 @@ export const postAdminLogin = async (req,res) => {
 
     if (email === process.env.admin_Email && password === process.env.admin_Password) {
       
-      const token = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET, {expiresIn: '1h'})
+      const token = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET)
+      const expiryDate = new Date(Date.now() + 3600000); //~ Setting token expiry to 1 hour
+      res.cookie('access_token', token, {httpOnly: true, expires: expiryDate })
       return res.status(200).json({ success: true, token })
     }
     return res.status(401).json({ success: false, message: 'Invalid credentials' })
@@ -28,7 +30,7 @@ export const getAllUsers = async (req,res,next) => {
   try {
     const users = await userModel.find().lean()
     console.log(users)
-    res.status(200).json(users)
+    res.status(200).json({success:true,users})
   }catch (error) {
     next(error)
   }

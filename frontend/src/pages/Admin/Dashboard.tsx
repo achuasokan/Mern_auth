@@ -25,10 +25,10 @@ const Dashboard = () => {
         const data = await res.json()
 
         // Check if data is an array
-        if (Array.isArray(data)) {
-          setUsers(data)
+        if (data.success) {
+          setUsers(data.users)
         } else {
-          console.error('Expected an array but got:', data)
+          console.error('Expected an array but got:', data.message)
         }
       } catch (error) {
         console.error('Failed to fetch users',error)
