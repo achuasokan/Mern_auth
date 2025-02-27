@@ -55,7 +55,7 @@ const Dashboard = () => {
    
         const data = await res.json()
 
-        if (data.success) {
+        if (data.success) {       //sorted foru
           setUsers(data.users)
         } else {
           console.error('Expected an array but got:', data.message)
