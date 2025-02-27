@@ -83,7 +83,7 @@ export const signIn = async (req, res, next) => {
     const expiryDate = new Date(Date.now() + 3600000); //~ Setting token expiry to 1 hour
 
     //~ Setting the cookie with the token
-    res.cookie('access_token', token, { httpOnly: true, expires: expiryDate })
+    res.cookie('access_token', token, { httpOnly: true, expires: expiryDate})
       .status(200).json(rest);
 
   } catch (error) {
@@ -130,7 +130,7 @@ export const google = async (req,res,next) => {
     const expiryDate = new Date(Date.now() + 3600000); //~ Setting token expiry to 1 hour
 
     //~ Setting the cookie with the token
-    res.cookie('access_token', token, { httpOnly: true, expires: expiryDate }).status(200).json(rest)
+    res.cookie('access_token', token, { httpOnly: true, expires: expiryDate}).status(200).json(rest)
 
     }
 

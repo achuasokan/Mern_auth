@@ -9,7 +9,9 @@ const router = express.Router()
 //^  //  //  //  //  //  //                Admin Auth routes             //  //  //  //  //  //  //
 
 router.post('/login',authController.postAdminLogin)
+router.post('/logout',authController.logout)
 router.get('/users', verifyAdmin, authController.getAllUsers)
 router.patch('/toggle-block/:id', verifyAdmin, authController.toggleUserBlock)
+router.post('/refresh-token',authController.refreshToken)
 
 export default router

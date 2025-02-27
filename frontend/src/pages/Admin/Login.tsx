@@ -27,7 +27,7 @@ const AdminLogin = () => {
       const data = await res.json()
 
       if(data.success) {
-        dispatch(adminLoginSuccess(data.token))
+        dispatch(adminLoginSuccess(data.accessToken))
         navigate('/admin/dashboard')
         toast.success('Admin logged in Successfully')
       } else {

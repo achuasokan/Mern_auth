@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2'
 import AdminNavbar from '../../components/AdminNavbar';
+import { useNavigate } from 'react-router-dom';
 
 //^ interface for user objects
 interface User {
@@ -16,15 +17,44 @@ const Dashboard = () => {
 
   const [users, setUsers] = useState<User[]>([])
   const [searchQuery, setSearchQuery] = useState('')
-
+  const navigate = useNavigate()
 //^ fetch the users when the components mount
   useEffect(() => {
     const fetchUsers= async () => {
       try {
         const res = await fetch('/api/admin/users')
+
+        if(res.status === 403) {
+          toast.error('You are not authorized to view this page.please login again')
+          navigate('/admin/login')
+          return
+        }
+
+        if(res.status === 401) {
+          const refreshRes =await fetch('/api/admin/refresh-token', {
+            method: 'POST',
+            credentials: 'include'
+         }) 
+
+         const refreshData = await refreshRes.json();
+         if (refreshData.success) {
+           // Retry fetching users after refreshing token
+           const retryRes = await fetch('/api/admin/users');
+           const data = await retryRes.json();
+           if (data.success) {
+             setUsers(data.users);
+           } else {
+             console.error('Expected an array but got:', data.message);
+           }
+         } else {
+           toast.error(refreshData.message);
+           navigate('/admin/login');
+         }
+         return;
+       }
+   
         const data = await res.json()
 
-        // Check if data is an array
         if (data.success) {
           setUsers(data.users)
         } else {

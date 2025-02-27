@@ -11,10 +11,13 @@ export const postAdminLogin = async (req,res) => {
 
     if (email === process.env.admin_Email && password === process.env.admin_Password) {
       
-      const token = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET)
+      const accessToken = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET)
+      const refreshToken = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET, {expiresIn: '7d'})
       const expiryDate = new Date(Date.now() + 3600000); //~ Setting token expiry to 1 hour
-      res.cookie('access_token', token, {httpOnly: true, expires: expiryDate })
-      return res.status(200).json({ success: true, token })
+      res.cookie('access_token', accessToken, {httpOnly: true, expires: expiryDate })
+
+      res.cookie('refresh_token', refreshToken, {httpOnly: true, expires: new Date(Date.now() + 604800000)})
+      return res.status(200).json({ success: true, accessToken,refreshToken })
     }
     return res.status(401).json({ success: false, message: 'Invalid credentials' })
    
@@ -56,3 +59,30 @@ export const toggleUserBlock = async (req,res,next) => {
     next(error)
   }
 } 
+
+
+export const refreshToken = async(req,res) => {
+  const refreshToken = req.cookies.refresh_token
+  if (!refreshToken) {
+    return res.status(401).json({ success: false, message: 'Refresh token not found' });
+  }
+
+  jwt.verify(refreshToken, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ success: false, message: 'Invalid refresh token' });
+    }
+
+    const newAccessToken = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.cookie('access_token', newAccessToken, { httpOnly: true, expires: new Date(Date.now() + 3600000) }); 
+
+    return res.status(200).json({ success: true, accessToken: newAccessToken });
+  })
+  
+}
+
+
+export const logout = () => {
+  res.clearCookie('access_token')
+  res.clearCookie('refresh_token')
+  return res.status(200).json({sucess: true, message: 'Logged out Successfully'})
+}
