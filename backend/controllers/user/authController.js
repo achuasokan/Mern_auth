@@ -77,13 +77,15 @@ export const signIn = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, 'Wrong Credentials'));
 
     //~ Generating a JWT token for the user
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const accessToken = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const refreshToken = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 
     const { password: hashedPassword, ...rest } = validUser._doc; //~ Excluding the password from the response
     const expiryDate = new Date(Date.now() + 3600000); //~ Setting token expiry to 1 hour
 
     //~ Setting the cookie with the token
-    res.cookie('access_token', token, { httpOnly: true, expires: expiryDate})
+    res.cookie('refresh_token', refreshToken, {httpOnly: true, expires: new Date(Date.now() + 604800000) })
+    res.cookie('access_token', accessToken, { httpOnly: true, expires: expiryDate})
       .status(200).json(rest);
 
   } catch (error) {
@@ -104,13 +106,15 @@ export const google = async (req,res,next) => {
         return next(errorHandler(403,'Your account has been blocked. please contact support'))
       }
 
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: '7d'});
       
     const { password: hashedPassword, ...rest } = user._doc; //~ Excluding the password from the response
     const expiryDate = new Date(Date.now() + 3600000); //~ Setting token expiry to 1 hour
 
     //~ Setting the cookie with the token
-    res.cookie('access_token', token, { httpOnly: true, expires: expiryDate }).status(200).json(rest)
+    res.cookie('refresh_token', refreshToken,{httpOnly: true, expires:new Date(Date.now() + 604800000) })
+    res.cookie('access_token', accessToken, { httpOnly: true, expires: expiryDate }).status(200).json(rest)
     } else {
       const generatedPassword= Math.random().toString(36).slice(-8)
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10)
@@ -124,13 +128,14 @@ export const google = async (req,res,next) => {
 
       await newUser.save()
 
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-      
+      const accessToken = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {expiresIn: '7d'});
     const { password: hashedPassword2, ...rest } = newUser._doc; //~ Excluding the password from the response
     const expiryDate = new Date(Date.now() + 3600000); //~ Setting token expiry to 1 hour
 
     //~ Setting the cookie with the token
-    res.cookie('access_token', token, { httpOnly: true, expires: expiryDate}).status(200).json(rest)
+    res.cookie('refresh_token', refreshToken,{httpOnly: true, expires:new Date(Date.now() + 604800000) })
+    res.cookie('access_token', accessToken, { httpOnly: true, expires: expiryDate}).status(200).json(rest)
 
     }
 
@@ -143,5 +148,22 @@ export const google = async (req,res,next) => {
 //* //  //  //   //  //          Signout    //  //  //  //  //  //  //
 
 export const signout = (req,res) => {
-  res.clearCookie('access_token').status(200).json('signout successfully')
+  res.clearCookie('access_token')
+  res.clearCookie('refresh_token')
+  return res.status(200).json({success: true, message: 'Logged out Successfully'})
 }
+
+
+
+export const refreshToken = (req, res, next) => {
+  const refreshToken = req.cookies.refresh_token;
+
+  if (!refreshToken) return next(errorHandler(401, 'You are not authenticated!'));
+
+  jwt.verify(refreshToken, process.env.JWT_SECRET, (err, user) => {
+    if (err) return next(errorHandler(403, 'Refresh token is not valid!'));
+
+    const newAccessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ accessToken: newAccessToken });
+  });
+};

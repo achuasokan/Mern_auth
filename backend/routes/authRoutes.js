@@ -6,4 +6,5 @@ router.post('/signup',authController.signUp)
 router.post('/signin',authController.signIn)
 router.post('/google',authController.google)
 router.post('/signout',authController.signout)
+router.post('/refreshToken',authController.refreshToken)
 export default router
