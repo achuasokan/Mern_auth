@@ -28,7 +28,13 @@ const Profile = () => {
       },
       (error: any, result: any) => {
         if (!error && result && result.event === "success") {
-          setProfilePicture(result.info.url);
+          // Validate the file type
+          const validFormats = ['jpg', 'jpeg', 'png', 'gif']; // Allowed formats
+          if (validFormats.includes(result.info.format)) {
+            setProfilePicture(result.info.url); 
+          } else {
+            toast.error('Invalid file type. Please upload an image (jpg, jpeg, png, gif).'); // Show error message
+          }
         }
       }
     );
